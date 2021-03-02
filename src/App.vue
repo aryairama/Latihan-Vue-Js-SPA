@@ -1,64 +1,120 @@
 <template>
   <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
+    <v-app-bar app color="info" dark extended>
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-toolbar-title>{{ nameApp }}</v-toolbar-title>
+      <!-- pemisah -->
       <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
+      <v-btn icon to="/about">
+        <v-badge color="orange" overlap>
+          <template v-slot:badge>
+            <span>3</span>
+          </template>
+          <v-icon large>mdi-cart</v-icon>
+        </v-badge>
       </v-btn>
+      <v-text-field
+        name="search"
+        label="search"
+        id="search"
+        slot="extension"
+        hide-details
+        append-icon="mdi-microphone"
+        flat
+        prepend-inner-icon="mdi-magnify"
+        solo-inverted
+      ></v-text-field>
     </v-app-bar>
+    <!--  -->
+    <!-- sidebar -->
+    <v-card>
+      <v-navigation-drawer app v-model="drawer">
+        <v-list-item v-if="!guest">
+          <v-list-item-avatar>
+            <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title>John Leider</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
 
+        <div class="pa-2" v-if="guest">
+          <v-btn block color="success">
+            <v-icon>mdi-lock</v-icon>
+            Login
+          </v-btn>
+          <v-btn block color="info" class="mt-1">
+            <v-icon>mdi-account</v-icon>
+            Register
+          </v-btn>
+        </div>
+
+        <v-divider></v-divider>
+
+        <v-list shaped>
+          <v-list-item
+            v-for="(item, index) of menus"
+            :key="index"
+            :to="item.route"
+          >
+            <v-list-item-icon>
+              <v-icon left>{{ item.icon }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+        <template v-slot:append v-if="!guest">
+          <div class="pa-2">
+            <v-btn block color="red" dark>
+              <v-icon left>mdi-lock</v-icon>
+              Logout
+            </v-btn>
+          </div>
+        </template>
+      </v-navigation-drawer>
+    </v-card>
+    <!-- end sidebar -->
     <v-main>
-      <HelloWorld/>
+      <v-container fluid>
+        <v-slide-y-transition>
+          <router-view></router-view>
+        </v-slide-y-transition>
+      </v-container>
     </v-main>
+    <v-card>
+      <v-footer absolute app>
+        <v-card-text class="text-center">
+          &copy; {{ new Date().getFullYear() }} - <strong>{{ nameApp }}</strong>
+        </v-card-text>
+      </v-footer>
+    </v-card>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
+import HelloWorld from "./components/HelloWorld";
 
 export default {
-  name: 'App',
+  name: "App",
 
   components: {
     HelloWorld,
   },
 
   data: () => ({
-    //
+    drawer: false,
+    menus: [
+      { title: "Home", icon: "mdi-home", route: "/" },
+      { title: "About", icon: "mdi-account", route: "/about" },
+    ],
+    guest: true,
   }),
-  created : function(){
-    this.axios.get('http://larashop-api.test/api/kategori/a')
-      .then(response => console.log(response.data))
-  }
+  computed: {
+    nameApp: function () {
+      return process.env.VUE_APP_NAME;
+    },
+  },
 };
 </script>
