@@ -7,7 +7,7 @@
           All Categories <v-icon>mdi-chevron-right</v-icon>
         </v-btn>
       </div>
-      <v-layout wrap>
+      <v-layout wrap row>
         <v-flex
           v-for="(category, index) in categories"
           :key="`category-` + category.id"

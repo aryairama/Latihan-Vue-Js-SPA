@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar app color="info" dark extended>
+    <v-app-bar app color="info" dark extended v-if="isHome">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title>{{ nameApp }}</v-toolbar-title>
       <!-- pemisah -->
@@ -24,6 +24,20 @@
         prepend-inner-icon="mdi-magnify"
         solo-inverted
       ></v-text-field>
+    </v-app-bar>
+    <v-app-bar app color="info" dark v-else>
+      <v-btn icon @click.stop="$router.go(-1)">
+        <v-icon>mdi-arrow-left-circle</v-icon>
+      </v-btn>
+      <v-spacer></v-spacer>
+      <v-btn icon @click="setDialogComponent('cart')">
+        <v-badge color="orange" overlap>
+          <template v-slot:badge v-if="countCart > 0">
+            <span>{{ countCart }} </span>
+          </template>
+          <v-icon>mdi-cart</v-icon>
+        </v-badge>
+      </v-btn>
     </v-app-bar>
     <!--  -->
     <!-- sidebar -->
@@ -114,6 +128,10 @@ export default {
   computed: {
     nameApp: function () {
       return process.env.VUE_APP_NAME;
+    },
+    isHome: function () {
+      console.log(this.$route.name);
+      return this.$route.path === "/";
     },
   },
 };
