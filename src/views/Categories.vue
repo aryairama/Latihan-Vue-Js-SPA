@@ -23,6 +23,7 @@
           </v-card>
         </v-flex>
       </v-layout>
+      <template>
       <v-pagination
         color="info"
         v-model="page"
@@ -30,6 +31,7 @@
         :length="lengthPage"
         :total-visible="5"
       ></v-pagination>
+      </template>
     </v-container>
   </div>
 </template>

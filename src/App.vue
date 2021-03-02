@@ -30,10 +30,10 @@
         <v-icon>mdi-arrow-left-circle</v-icon>
       </v-btn>
       <v-spacer></v-spacer>
-      <v-btn icon @click="setDialogComponent('cart')">
+      <v-btn icon to="/about">
         <v-badge color="orange" overlap>
-          <template v-slot:badge v-if="countCart > 0">
-            <span>{{ countCart }} </span>
+          <template v-slot:badge>
+            <span>3</span>
           </template>
           <v-icon>mdi-cart</v-icon>
         </v-badge>
@@ -130,7 +130,6 @@ export default {
       return process.env.VUE_APP_NAME;
     },
     isHome: function () {
-      console.log(this.$route.name);
       return this.$route.path === "/";
     },
   },
