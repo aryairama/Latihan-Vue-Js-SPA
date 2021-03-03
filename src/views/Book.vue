@@ -63,6 +63,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   data: () => ({
     book: {}, // objek book
@@ -71,6 +72,10 @@ export default {
     this.go();
   },
   methods: {
+    ...mapActions({
+      addCart:'Cart/add',
+      setAlert:'Alert/set'
+    }),
     go() {
       let { slug } = this.$route.params;
       let url = "api/books/slug/" + slug;
@@ -88,7 +93,14 @@ export default {
         });
     },
     buy() {
-      alert("buy");
+      //tanpa mapActions
+      // this.$store.dispatch('Cart/add',this.book)
+      this.addCart(this.book)
+      this.setAlert({
+        status : true,
+        color : 'success',
+        text : 'Added to cart'
+      })
     },
   },
 };

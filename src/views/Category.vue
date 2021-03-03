@@ -18,14 +18,7 @@
           xs6
           lg3
           md3>
-          <v-card :to="'/book/' + book.slug">
-            <v-img :src="getImage('/books/' + book.cover)" class="white--text">
-              <v-card-title
-                class="fill-height align-end"
-                v-text="book.title"
-              ></v-card-title>
-            </v-img>
-          </v-card>
+          <BookItem :book="book" :key="index"/>
         </v-flex>
       </v-layout>
     </v-container>
@@ -51,6 +44,9 @@ export default {
     page: 0,
     lengthPage: 0,
   }),
+  components : {
+    BookItem : ()=> import('../components/BookItem')
+  },
   created: function () {
     this.go();
   },
