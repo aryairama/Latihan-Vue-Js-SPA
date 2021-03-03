@@ -35,13 +35,13 @@
       </div>
       <v-layout wrap>
         <v-flex
-          v-for="(book, index) in books"
+          v-for="book in books"
           :key="`book-` + book.id"
           xs6
           lg3
           md3
         >
-          <BookItem :book="book" :key="index"/>
+          <BookItem :book="book"/>
         </v-flex>
       </v-layout>
     </v-container>

@@ -8,12 +8,12 @@
       <v-btn icon to="/about">
         <v-badge color="orange" overlap>
           <template v-slot:badge>
-            <span>{{countCart}}</span>
+            <span>{{ countCart }}</span>
           </template>
           <v-icon large>mdi-cart</v-icon>
         </v-badge>
       </v-btn>
-      <v-text-field 
+      <v-text-field
         color="info"
         name="search"
         label="search"
@@ -24,6 +24,7 @@
         flat
         prepend-inner-icon="mdi-magnify"
         solo-inverted
+        @click="dialog = true"
       ></v-text-field>
     </v-app-bar>
     <v-app-bar app color="info" dark v-else>
@@ -34,7 +35,7 @@
       <v-btn icon to="/about">
         <v-badge color="orange" overlap>
           <template v-slot:badge>
-            <span>{{countCart}}</span>
+            <span>{{ countCart }}</span>
           </template>
           <v-icon>mdi-cart</v-icon>
         </v-badge>
@@ -93,7 +94,15 @@
     <!-- end sidebar -->
     <v-main>
       <!-- alert -->
-      <Alert/>
+      <Alert />
+      <v-dialog
+        v-model="dialog"
+        fullscreen
+        hide-overlay
+        transition="scaletransition">
+        <search @closed="closeDialog($event)" />
+      </v-dialog>
+      <!-- search -->
       <v-container fluid>
         <v-slide-y-transition>
           <router-view></router-view>
@@ -111,15 +120,13 @@
 </template>
 
 <script>
-
-import { mapGetters} from 'vuex'
+import { mapGetters } from "vuex";
 export default {
   name: "App",
-
   components: {
-    Alert : ()=> import('./components/Alert')
+    Alert: () => import("./components/Alert"),
+    Search: () => import("./components/Search")
   },
-
   data: () => ({
     drawer: false,
     menus: [
@@ -127,6 +134,7 @@ export default {
       { title: "About", icon: "mdi-account", route: "/about" },
     ],
     guest: true,
+    dialog : false
   }),
   computed: {
     nameApp: function () {
@@ -136,8 +144,13 @@ export default {
       return this.$route.path === "/";
     },
     ...mapGetters({
-      countCart:'Cart/count'
-    })
+      countCart: "Cart/count",
+    }),
   },
+  methods : {
+    closeDialog : function(value){
+      this.dialog = value
+    }
+  }
 };
 </script>

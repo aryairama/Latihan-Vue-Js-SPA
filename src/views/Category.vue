@@ -18,7 +18,7 @@
           xs6
           lg3
           md3>
-          <BookItem :book="book" :key="index"/>
+          <BookItem :book="book"/>
         </v-flex>
       </v-layout>
     </v-container>
