@@ -61,7 +61,8 @@ export default {
       }
     },
     close : function(){
-      this.$emit('closed',false)
+      // this.$emit('closed',false)
+      this.$store.dispatch('Search/dialog',false)
     }
   }
 };

@@ -24,7 +24,7 @@
         flat
         prepend-inner-icon="mdi-magnify"
         solo-inverted
-        @click="dialog = true"
+        @click="dialogOpen"
       ></v-text-field>
     </v-app-bar>
     <v-app-bar app color="info" dark v-else>
@@ -134,9 +134,12 @@ export default {
       { title: "About", icon: "mdi-account", route: "/about" },
     ],
     guest: true,
-    dialog : false
+    //dialog:false
   }),
   computed: {
+    dialog : function(){
+        return this.dialog
+    },
     nameApp: function () {
       return process.env.VUE_APP_NAME;
     },
@@ -145,11 +148,16 @@ export default {
     },
     ...mapGetters({
       countCart: "Cart/count",
+      dialog: "Search/dialog"
     }),
   },
   methods : {
     closeDialog : function(value){
       this.dialog = value
+    },
+    dialogOpen: function(){
+      // this.dialog = true
+      this.$store.dispatch('Search/dialog',true)
     }
   }
 };

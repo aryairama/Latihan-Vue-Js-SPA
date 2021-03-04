@@ -71,6 +71,9 @@ export default {
   created() {
     this.go();
   },
+  beforeCreate(){
+    this.$store.dispatch('Search/dialog',false)
+  },
   methods: {
     ...mapActions({
       addCart:'Cart/add',
