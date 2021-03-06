@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-toolbar dark color="info">
-      <v-btn icon dark @click.native="close">
+      <v-btn icon dark @click="close()">
         <v-icon>mdi-close</v-icon>
       </v-btn>
       <v-text-field
@@ -61,8 +61,7 @@ export default {
       }
     },
     close : function(){
-      // this.$emit('closed',false)
-      this.$store.dispatch('Search/dialog',false)
+      this.$emit('closed',false)
     }
   }
 };

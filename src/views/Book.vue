@@ -72,12 +72,13 @@ export default {
     this.go();
   },
   beforeCreate(){
-    this.$store.dispatch('Search/dialog',false)
+    this.$store.dispatch('Dialog/setStatus',false)
   },
   methods: {
     ...mapActions({
       addCart:'Cart/add',
-      setAlert:'Alert/set'
+      setAlert:'Alert/set',
+      setStatus: 'Dialog/setStatus'
     }),
     go() {
       let { slug } = this.$route.params;

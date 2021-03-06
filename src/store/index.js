@@ -2,7 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import Cart from './Cart' 
 import Alert from './Alert'
-import Search from './Search'
+import Auth from './Auth'
+import Dialog from './Dialog'
 
 Vue.use(Vuex)
 
@@ -18,6 +19,7 @@ export default new Vuex.Store({
   modules: {
     Cart,
     Alert,
-    Search
+    Auth,
+    Dialog
   }
 })

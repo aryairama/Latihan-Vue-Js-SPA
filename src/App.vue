@@ -24,7 +24,7 @@
         flat
         prepend-inner-icon="mdi-magnify"
         solo-inverted
-        @click="dialogOpen"
+        @click="setDialogComponent('search')"
       ></v-text-field>
     </v-app-bar>
     <v-app-bar app color="info" dark v-else>
@@ -47,15 +47,15 @@
       <v-navigation-drawer app v-model="drawer">
         <v-list-item v-if="!guest">
           <v-list-item-avatar>
-            <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
+            <v-img :src="getImage('/users/'+user.avatar)"></v-img>
           </v-list-item-avatar>
           <v-list-item-content>
-            <v-list-item-title>John Leider</v-list-item-title>
+            <v-list-item-title>{{ user.name }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
         <div class="pa-2" v-if="guest">
-          <v-btn block color="success">
+          <v-btn block color="success" @click="setDialogComponent('login')">
             <v-icon>mdi-lock</v-icon>
             Login
           </v-btn>
@@ -94,14 +94,19 @@
     <!-- end sidebar -->
     <v-main>
       <!-- alert -->
-      <Alert />
-      <v-dialog
-        v-model="dialog"
-        fullscreen
-        hide-overlay
-        transition="scaletransition">
-        <search @closed="closeDialog($event)" />
-      </v-dialog>
+      <alert />
+      <keep-alive>
+        <v-dialog
+          persistent
+          v-model="dialog"
+          fullscreen
+          hide-overlay
+          transition="dialogbottom-transition"
+        >
+          <component :is="currentComponent" @closed="setDialogStatus($event)"></component>
+        </v-dialog>
+      </keep-alive>
+
       <!-- search -->
       <v-container fluid>
         <v-slide-y-transition>
@@ -120,12 +125,13 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 export default {
   name: "App",
   components: {
     Alert: () => import("./components/Alert"),
-    Search: () => import("./components/Search")
+    Search: () => import("./components/Search"),
+    Login: () => import("./components/Login")
   },
   data: () => ({
     drawer: false,
@@ -133,12 +139,17 @@ export default {
       { title: "Home", icon: "mdi-home", route: "/" },
       { title: "About", icon: "mdi-account", route: "/about" },
     ],
-    guest: true,
+    // guest: true,
     //dialog:false
   }),
   computed: {
-    dialog : function(){
-        return this.dialog
+    dialog: {
+      set:function(value){
+        this.setDialogStatus(value)
+      },
+      get:function(){
+        return this.dialogStatus
+      }
     },
     nameApp: function () {
       return process.env.VUE_APP_NAME;
@@ -148,17 +159,17 @@ export default {
     },
     ...mapGetters({
       countCart: "Cart/count",
-      dialog: "Search/dialog"
+      guest: "Auth/guest",
+      user: "Auth/user",
+      dialogStatus: "Dialog/status",
+      currentComponent: "Dialog/component",
     }),
   },
-  methods : {
-    closeDialog : function(value){
-      this.dialog = value
-    },
-    dialogOpen: function(){
-      // this.dialog = true
-      this.$store.dispatch('Search/dialog',true)
-    }
-  }
+  methods: {
+    ...mapActions({
+      setDialogStatus: "Dialog/setStatus",
+      setDialogComponent: "Dialog/setComponent",
+    }),
+  },
 };
 </script>
