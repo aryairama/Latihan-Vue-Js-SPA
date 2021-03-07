@@ -83,7 +83,7 @@
         </v-list>
         <template v-slot:append v-if="!guest">
           <div class="pa-2">
-            <v-btn block color="red" dark>
+            <v-btn block color="red" dark @click="logout()">
               <v-icon left>mdi-lock</v-icon>
               Logout
             </v-btn>
@@ -169,7 +169,34 @@ export default {
     ...mapActions({
       setDialogStatus: "Dialog/setStatus",
       setDialogComponent: "Dialog/setComponent",
+      setAuth: "Auth/set",
+      setAlert: "Alert/set"
     }),
+    logout : async function(){
+      try {
+        let logout = await this.axios('api/logout',{
+          method : 'POST',
+          headers : {
+            "Content-Type": "multipart/form-data",
+            "Authorization" : `Bearer ${this.user.api_token}`
+          }
+        })
+        if(logout.status === 200){
+          this.setAuth({})
+          this.setAlert({
+            status : true,
+            color: logout.data.status,
+            text: logout.data.message
+          })
+        }
+      } catch (error) {
+        this.setAlert({
+          status : true,
+          color : 'error',
+          text : error.response.data.message
+        })
+      }
+    }
   },
 };
 </script>
