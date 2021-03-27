@@ -5,9 +5,9 @@
       <v-toolbar-title>{{ nameApp }}</v-toolbar-title>
       <!-- pemisah -->
       <v-spacer></v-spacer>
-      <v-btn icon to="/about">
+      <v-btn icon @click="setDialogComponent('cart')">
         <v-badge color="orange" overlap>
-          <template v-slot:badge>
+          <template v-slot:badge v-if="countCart > 0">
             <span>{{ countCart }}</span>
           </template>
           <v-icon large>mdi-cart</v-icon>
@@ -32,12 +32,12 @@
         <v-icon>mdi-arrow-left-circle</v-icon>
       </v-btn>
       <v-spacer></v-spacer>
-      <v-btn icon to="/about">
+      <v-btn icon @click="setDialogComponent('cart')">
         <v-badge color="orange" overlap>
-          <template v-slot:badge>
+          <template v-slot:badge v-if="countCart > 0">
             <span>{{ countCart }}</span>
           </template>
-          <v-icon>mdi-cart</v-icon>
+          <v-icon large>mdi-cart</v-icon>
         </v-badge>
       </v-btn>
     </v-app-bar>
@@ -132,7 +132,8 @@ export default {
     Alert: () => import("./components/Alert"),
     Search: () => import("./components/Search"),
     Login: () => import("./components/Login"),
-    Register: () => import("./components/Register")
+    Register: () => import("./components/Register"),
+    Cart : () => import("./components/Cart")
   },
   data: () => ({
     drawer: false,
@@ -171,7 +172,7 @@ export default {
       setDialogStatus: "Dialog/setStatus",
       setDialogComponent: "Dialog/setComponent",
       setAuth: "Auth/set",
-      setAlert: "Alert/set"
+      setAlert: "Alert/set",
     }),
     logout : async function(){
       try {
