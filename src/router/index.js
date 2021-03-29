@@ -64,7 +64,9 @@ router.beforeEach((to, from, next) => {
         text: 'Login first',
         color: 'error',
       })
+      store.dispatch('setPrevUrl',to.path)
       store.dispatch('Dialog/setComponent', 'login')
+      store.dispatch('Dialog/setStatus', true)
     } else {
       next(true)
     }

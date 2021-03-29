@@ -65,6 +65,7 @@ export default {
   computed: {
     ...mapGetters({
       user: "Auth/user",
+      prevUrl: "prevUrl"
     }),
   },
   methods: {
@@ -93,6 +94,10 @@ export default {
                 color: "success",
                 text: "Login success",
               });
+              if(this.prevUrl.length>0){
+                this.$router.push(this.prevUrl)
+                this.$store.dispatch("setPrevUrl","")
+              }
               this.close();
             } else {
               this.setAlert({

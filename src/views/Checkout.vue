@@ -97,14 +97,14 @@ export default {
       formData.append("province_id", this.province_id);
       formData.append("city_id", this.city_id);
       try {
-        let sendSaveShipping = await this.axios("/api/shipping", {
-          method: "POST",
+        let sendSaveShipping = await this.axios("api/shipping", {
+          method: 'POST',
           data: formData,
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${this.user.api_token}`,
+            "Authorization" : `Bearer ${this.user.api_token}`,
           },
-        });
+        })
         if (sendSaveShipping.status === 200) {
           let { data } = sendSaveShipping;
           this.setAuth(data.data);
@@ -115,7 +115,7 @@ export default {
           });
         }
       } catch (error) {
-        let { data } = error;
+        let { data } = error.response;
         this.setAlert({
           status: true,
           text: data.message,

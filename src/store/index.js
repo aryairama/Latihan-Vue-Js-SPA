@@ -10,12 +10,22 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    prevUrl: ''
   },
   mutations: {
+    setPrevUrl: function (state, payload) {
+      state.prevUrl = payload
+    }
   },
   actions: {
+    setPrevUrl: function ({ commit }, payload) {
+      commit('setPrevUrl',payload)
+    }
   },
   getters: {
+    prevUrl: function (state) {
+      return state.prevUrl
+    }
   },
   modules: {
     Cart,
