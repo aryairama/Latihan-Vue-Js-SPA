@@ -112,6 +112,7 @@
         <v-slide-y-transition>
           <router-view></router-view>
         </v-slide-y-transition>
+        <vue-progress-bar></vue-progress-bar>
       </v-container>
     </v-main>
     <v-card>

@@ -4,6 +4,7 @@ import Cart from './Cart'
 import Alert from './Alert'
 import Auth from './Auth'
 import Dialog from './Dialog'
+import Region from './Region'
 
 Vue.use(Vuex)
 
@@ -20,6 +21,7 @@ export default new Vuex.Store({
     Cart,
     Alert,
     Auth,
-    Dialog
+    Dialog,
+    Region
   }
 })
