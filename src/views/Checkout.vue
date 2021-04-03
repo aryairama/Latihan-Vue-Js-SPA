@@ -87,6 +87,55 @@
         </v-container>
       </v-card>
     </div>
+    <v-subheader>Courier</v-subheader>
+    <div>
+      <v-card flat>
+        <v-container>
+          <v-select
+            :items="couriers"
+            v-model="courier"
+            label="Courier"
+            @change="getServices()"
+            item-text="text"
+            item-value="id"
+            persistent-hint
+            single-line
+          ></v-select>
+          <v-select
+            :items="services"
+            v-model="service"
+            label="Courier Service"
+            v-if="courier"
+            @change="calculateBill()"
+            item-text="resume"
+            item-value="service"
+            persistent-hint
+            single-line
+          ></v-select>
+          <v-card-actions>
+            Subtotal
+            <v-spacer></v-spacer>Rp. {{ shippingCost.toLocaleString('id-ID') }}
+          </v-card-actions>
+        </v-container>
+      </v-card>
+    </div>
+    <!--  -->
+    <v-subheader>Total</v-subheader>
+    <v-card>
+      <v-container>
+        <v-layout row wrap>
+          <v-flex xs6 text-center>
+            Total Bill ({{ totalQuantity  }}items)
+            <div class="title">{{totalBill.toLocaleString('id-ID')}}</div>
+          </v-flex>
+          <v-flex xs6>
+            <v-btn color="info">
+              <v-icon>mdi-cash</v-icon>&nbsp;Pay
+            </v-btn>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-card>
   </div>
 </template>
 
@@ -99,6 +148,12 @@ export default {
     phone: "",
     province_id: 0,
     city_id: 0,
+    courier: '',
+    couriers : [],
+    service : '',
+    services: [],
+    shippingCost: 0,
+    totalBill: 0
   }),
   computed: {
     ...mapGetters({
@@ -124,6 +179,7 @@ export default {
       setAuth: "Auth/set",
       setProvinces: "Region/setProvinces",
       setCities: "Region/setCities",
+      setCart : "Cart/set"
     }),
     saveShipping: async function () {
       let formData = new FormData();
@@ -159,6 +215,47 @@ export default {
         });
       }
     },
+    getServices: async function(){
+      let courier = this.courier
+      let encodedCart = JSON.stringify(this.carts)
+      let formData  = new FormData()
+      formData.append('courier',courier)
+      formData.append('carts',encodedCart)
+      try {
+        let requestServices = await this.axios('/api/services',{
+          method : "POST",
+          data : formData,
+          headers : {
+          "Content-Type": "multipart/form-data",
+          "Authorization" : `Bearer ${this.user.api_token}`
+          }
+        })
+        let { data } =  requestServices.data
+        if(requestServices.status != 'error'){
+          this.services =  data.services
+          this.setCart(data.safe_carts)
+        }
+        this.setAlert({
+          status : true,
+          text: requestServices.data.message,
+          color : requestServices.data.status
+        })
+      } catch (error) {
+        let response = error.response
+        this.setAlert({
+          status : true,
+          text : response.data.message,
+          color : 'error'
+        })
+      }
+    },
+    calculateBill : function(){
+      let selectedService =  this.services.find((service) => {
+        return (service.service == this.service)
+      })
+      this.shippingCost = selectedService.cost 
+      this.totalBill = parseInt(this.totalPrice) + parseInt(this.shippingCost)
+    }
   },
   created: async function () {
     this.name = this.user.name;
@@ -183,6 +280,17 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    }
+    //courier
+    if(this.couriers.length === 0){
+      let getCouriers = await this.axios('/api/couriers',{
+        method : "GET",
+        headers : {
+          "Content-Type": "multipart/form-data",
+          "Authorization" : `Bearer ${this.user.api_token}`
+        } 
+      })
+      this.couriers = getCouriers.data.data
     }
   },
 };
