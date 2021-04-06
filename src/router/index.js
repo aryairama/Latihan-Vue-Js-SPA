@@ -46,6 +46,14 @@ const routes = [{
     meta: {
       auth: true
     }
+  },
+  {
+    path: '/payment',
+    name: 'payment',
+    component: () => import('../views/Payment.vue'),
+    meta: {
+      auth: true
+    }
   }
 ]
 
@@ -64,7 +72,7 @@ router.beforeEach((to, from, next) => {
         text: 'Login first',
         color: 'error',
       })
-      store.dispatch('setPrevUrl',to.path)
+      store.dispatch('setPrevUrl', to.path)
       store.dispatch('Dialog/setComponent', 'login')
     } else {
       next(true)

@@ -94,7 +94,7 @@
     <!-- end sidebar -->
     <v-main>
       <!-- alert -->
-      <alert />
+      <alert></alert>
       <keep-alive>
         <v-dialog
           persistent
