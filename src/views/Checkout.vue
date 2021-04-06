@@ -299,8 +299,10 @@ export default {
         let { data } = sendPay;
         if (sendPay.status === 200) {
           this.setPayment(data.data);
+          let payment_link = data.data.payment_link
+          window.location = payment_link
           this.setCart([]);
-          this.$router.push({ path: "/payment" });
+          // this.$router.push({ path: "/payment" });
         }
         this.setAlert({
           status: true,
