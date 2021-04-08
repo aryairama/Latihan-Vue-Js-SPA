@@ -16,6 +16,7 @@ module.exports = {
     'vue/no-unused-components': 'warn',
     'vue/no-unused-vars': 'warn',
     'no-unused-vars': 'off',
+    'vue/no-use-v-if-with-v-for': 'off'
   },
   overrides: [
     {

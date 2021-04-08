@@ -5,10 +5,15 @@ import Alert from './Alert'
 import Auth from './Auth'
 import Dialog from './Dialog'
 import Region from './Region'
+import VuexPersist from 'vuex-persist'
 
 Vue.use(Vuex)
-
+const vuexPersist = new VuexPersist({
+  key: "BookStore",
+  storage: localStorage,
+})
 export default new Vuex.Store({
+  plugins:[vuexPersist.plugin],
   state: {
     prevUrl: '',
     payment: []

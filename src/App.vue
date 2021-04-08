@@ -70,8 +70,9 @@
         <v-list shaped>
           <v-list-item
             v-for="(item, index) of menus"
-            :key="index"
+            :key="'menu-'+index"
             :to="item.route"
+            v-if="!item.auth || (item.auth && !guest)"
           >
             <v-list-item-icon>
               <v-icon left>{{ item.icon }}</v-icon>
@@ -140,7 +141,9 @@ export default {
     drawer: false,
     menus: [
       { title: "Home", icon: "mdi-home", route: "/" },
-      { title: "About", icon: "mdi-account", route: "/about" },
+      { title: "Profile", icon:"mdi-account", route: "/profile", auth:true},
+      { title: "My Order", icon: "mdi-shopping", route: "/myorder", auth:true},
+      { title: "About", icon: "mdi-help-box", route: "/about" },
     ],
     // guest: true,
     //dialog:false
